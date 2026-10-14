@@ -1,22 +1,26 @@
-import {useState} from "react";
-import './Atributo.css';
-
-export default function Atributo(){
+import { useState } from "react";
+import "./Atributo.css";
+type AtributoProps = {
+    icone: string;
+}
+export default function Atributo({ icone }: AtributoProps) {
     const [valor, setValor] = useState<number>(0)
-   
-    return(
-    <div className="atributo">
-        {valor}{"❤️".repeat(valor)}{"🩶".repeat(5-valor)}
-        <button onClick={()=>{
-            if (valor === 5){
-                setValor(0);
-            }
-            else{
-                setValor(valor + 1);
-            }
-        }}>+</button>
-          
-    </div>);
 
+    return (
+        <div className="atributo">
+            {valor}{icone.repeat(valor)}<span className="inativo">{icone.repeat(5 - valor)}</span>
+            <button onClick={() => {
+                setValor(updateValor);
+                setValor(updateValor);
+            }}>+</button>
+        </div>
+    );
+}
 
+function updateValor(prevValor) {
+    if (prevValor === 5) {
+        return 0;
+    } else {
+        return prevValor + 1;
+    }
 }

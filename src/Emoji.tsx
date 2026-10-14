@@ -1,63 +1,72 @@
-import { useState } from 'react';
-import './Emoji.css';
-import Atributo from './Atributo';
-type EMOJIS_KEYS = "happy" | "sick" | "dead";
-const EMOJIS_MAP = new Map<EMOJIS_KEYS, string>([
-    ["happy", "😊​"],
-    ["sick", "🤢​"],
-    ["dead", "😵​"],
+import { useState } from "react";
+import "./Emoji.css";
+import Atributo from "./Atributo";
+
+type EMOJI_KEYS = "happy" | "sick" | "dead";
+const EMOJI_MAP = new Map<EMOJI_KEYS, string>([
+    ["happy", "🙂"],
+    ["sick", "🤢"],
+    ["dead", "😵"],
 ]);
 
+
+
 export default function Emoji() {
-    const [status, setStatus] = useState<EMOJIS_KEYS>
-        ("sick")
-    function HappyClick() {
+
+    const [status, setStatus] = useState<EMOJI_KEYS>("happy")
+
+    function happyClick() {
         console.log("Status: ", status);
-        console.log("Happy!!!");
+        console.log("Happy!!");
         setStatus("happy");
         console.log("Status: ", status);
     }
-    function SickClick() {
+    function sickClick() {
         console.log("Status: ", status);
-        console.log("Sick!!!");
+        console.log("Sick!!");
         setStatus("sick");
         console.log("Status: ", status);
     }
-    function DeadClick() {
+    function deadClick() {
         console.log("Status: ", status);
-        console.log("Dead!!!");
+        console.log("Dead!");
         setStatus("dead");
         console.log("Status: ", status);
     }
-
-    function CicloClick(){
-        switch (status){
+    function cicleClick() {
+        switch (status) {
+            case "dead":
+                setStatus("happy");
+                break;
             case "happy":
                 setStatus("sick");
                 break;
             case "sick":
                 setStatus("dead");
                 break;
-            case "dead":
-                setStatus("happy");
-                break;
             default:
                 setStatus("happy");
         }
     }
+
+    console.log("Desenhando...");
+    console.log("Status: ", status);
+
     return (
         <>
             <div className="emoji">
-                {EMOJIS_MAP.get(status) || "🤔"}
+                {EMOJI_MAP.get(status) || "🫥"}
             </div>
-            <Atributo/>
+            <Atributo icone="❤️" />
+            <Atributo icone="🔋" />
+            <Atributo icone="💧" />
+            <Atributo icone="🍗" />
             <div className="acoes">
-                <button onClick={HappyClick}>Happy</button>
-                <button onClick={SickClick}>Sick</button>
-                <button onClick={DeadClick}>Dead</button> 
-                <button onClick={CicloClick}>Ciclo</button>
+                <button onClick={happyClick}>Happy</button>
+                <button onClick={sickClick}>Sick</button>
+                <button onClick={deadClick}>Dead</button>
+                <button onClick={cicleClick}>Cicle</button>
             </div>
         </>
-
     );
 }
