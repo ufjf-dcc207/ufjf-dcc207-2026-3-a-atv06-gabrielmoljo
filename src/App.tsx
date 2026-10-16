@@ -1,13 +1,13 @@
-import Emoji from "./Emoji.tsx"
+import Emoji from "./Emoji"
 
 function App() {
 
   return (
     <>
-    <h1>emoji</h1>
-    <br />
-    <Emoji />
+      <h1>EMOJI</h1>
+      <Emoji />
     </>
   )
-  }
+}
+
 export default App

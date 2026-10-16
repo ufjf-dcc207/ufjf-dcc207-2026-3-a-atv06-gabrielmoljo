@@ -1,72 +1,91 @@
 import { useState } from "react";
 import "./Emoji.css";
 import Atributo from "./Atributo";
+import type { AtributoType, EMOJI_KEYS, EmojiType } from "./types";
 
-type EMOJI_KEYS = "happy" | "sick" | "dead";
 const EMOJI_MAP = new Map<EMOJI_KEYS, string>([
     ["happy", "🙂"],
     ["sick", "🤢"],
     ["dead", "😵"],
 ]);
 
-
-
 export default function Emoji() {
 
-    const [status, setStatus] = useState<EMOJI_KEYS>("happy")
+    const [emoji, setEmoji] = useState<EmojiType>({
+        agua: 1,
+        comida: 2,
+        energia: 3,
+        luz: true,
+        vida: 5
+    });
 
-    function happyClick() {
-        console.log("Status: ", status);
-        console.log("Happy!!");
-        setStatus("happy");
-        console.log("Status: ", status);
+
+    function alimentarClick() {
+        if (emoji.vida === 0) return;
+        const novoEmoji = structuredClone(emoji);
+        novoEmoji.comida = Math.min(5, emoji.comida + 1) as AtributoType;
+        setEmoji(novoEmoji);
     }
-    function sickClick() {
-        console.log("Status: ", status);
-        console.log("Sick!!");
-        setStatus("sick");
-        console.log("Status: ", status);
+    function hidratarClick() {
+        if (emoji.vida === 0) return;
+        setEmoji({ ...emoji, agua: Math.min(5, emoji.agua + 1) as AtributoType });
     }
-    function deadClick() {
-        console.log("Status: ", status);
-        console.log("Dead!");
-        setStatus("dead");
-        console.log("Status: ", status);
+    function altenarLuzClick() {
+        setEmoji({ ...emoji, luz: !emoji.luz });
     }
-    function cicleClick() {
-        switch (status) {
-            case "dead":
-                setStatus("happy");
-                break;
-            case "happy":
-                setStatus("sick");
-                break;
-            case "sick":
-                setStatus("dead");
-                break;
-            default:
-                setStatus("happy");
+    function cicloClick() {
+        if (emoji.vida === 0) return;
+
+        const newEmoji = structuredClone(emoji);
+        if (newEmoji.comida === 0) {
+            newEmoji.vida = Math.max(0, newEmoji.vida - 1) as AtributoType;
         }
+        newEmoji.comida = Math.max(0, emoji.comida - 1) as AtributoType;
+
+        if (newEmoji.agua === 0) {
+            newEmoji.vida = Math.max(0, newEmoji.vida - 1) as AtributoType;
+        }
+        newEmoji.agua = Math.max(0, newEmoji.agua - 1) as AtributoType;
+
+        if (newEmoji.luz) {
+            if (newEmoji.energia === 0) {
+                newEmoji.vida = Math.max(0, newEmoji.vida - 1) as AtributoType;
+            }
+            newEmoji.energia = Math.max(0, newEmoji.energia - 1) as AtributoType;
+        } else {
+            newEmoji.energia = Math.min(5, newEmoji.energia + 1) as AtributoType;
+        }
+        setEmoji(newEmoji);
+
     }
 
-    console.log("Desenhando...");
-    console.log("Status: ", status);
+    let status = EMOJI_MAP.get("happy");
+    if (emoji.agua === 0 || emoji.comida === 0 || emoji.energia === 0) {
+        status = EMOJI_MAP.get("sick");
+    }
+    if (emoji.vida === 0) {
+        status = EMOJI_MAP.get("dead");
+    }
+
 
     return (
-        <>
-            <div className="emoji">
-                {EMOJI_MAP.get(status) || "🫥"}
+        <div className="emoji">
+            <div className="face">
+                {status}
             </div>
-            <Atributo icone="❤️" />
-            <Atributo icone="🔋" />
-            <Atributo icone="💧" />
-            <Atributo icone="🍗" />
+            <div className="atributos">
+                <Atributo icone="❤️" valor={emoji.vida} />
+                <Atributo icone="🔋" valor={emoji.energia} />
+                <Atributo icone="💧" valor={emoji.agua} />
+                <Atributo icone="🍗" valor={emoji.comida} />
+                {emoji.luz && "💡"}
+            </div>
             <div className="acoes">
-                <button onClick={happyClick}>Happy</button>
-                <button onClick={sickClick}>Sick</button>
-                <button onClick={deadClick}>Dead</button>
-                <button onClick={cicleClick}>Cicle</button>
+                <button onClick={alimentarClick}>Alimentar</button>
+                <button onClick={hidratarClick}>Hidratar</button>
+                <button onClick={altenarLuzClick}>{emoji.luz ? 'Desligar' : 'Ligar'} Luz</button>
+                <button onClick={cicloClick}>Ciclo</button>
             </div>
-        </>
+        </div>
     );
 }

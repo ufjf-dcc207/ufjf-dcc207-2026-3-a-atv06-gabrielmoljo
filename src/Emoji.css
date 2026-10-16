@@ -1,4 +1,13 @@
-.emoji{
-    font-size: 4em;
-    margin: 0.5em;
+.emoji {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    & .face {
+        font-size: 4em;
+        display: grid;
+        place-content: center;
+    }
+    & .acoes, & .atributos  {
+        display: flex;
+        flex-direction: column;
+    }
 }
